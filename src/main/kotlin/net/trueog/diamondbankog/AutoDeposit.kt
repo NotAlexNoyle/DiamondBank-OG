@@ -15,38 +15,37 @@ object AutoDeposit {
         }
 
         if (!player.hasPermission("diamondbank-og.deposit")) {
-            player.sendMessage(DiamondBankOG.mm.deserialize("${Config.prefix}<reset>: <red>You do not have permission to deposit."))
+            player.sendMessage(
+                DiamondBankOG.mm.deserialize("${Config.prefix}<reset>: <red>You do not have permission to deposit.")
+            )
             return
         }
 
         val itemStack = item.itemStack
-        val shards = if (itemStack.type == Material.DIAMOND_BLOCK) {
-            itemStack.amount * 9 * 9
-        } else if (itemStack.type == Material.DIAMOND) {
-            itemStack.amount * 9
-        } else if (itemStack.persistentDataContainer.has(Shard.namespacedKey)) {
-            itemStack.amount
-        } else {
-            return
-        }
+        val shards =
+            if (itemStack.type == Material.DIAMOND_BLOCK) {
+                itemStack.amount * 9 * 9
+            } else if (itemStack.type == Material.DIAMOND) {
+                itemStack.amount * 9
+            } else if (itemStack.persistentDataContainer.has(Shard.namespacedKey)) {
+                itemStack.amount
+            } else {
+                return
+            }
 
         itemStack.amount = 0
         item.itemStack = itemStack
 
         DiamondBankOG.scope.launch {
             DiamondBankOG.transactionLock.withLockSuspend(player.uniqueId) {
-                val error = DiamondBankOG.postgreSQL.addToPlayerShards(
-                    player.uniqueId,
-                    shards,
-                    ShardType.BANK
-                )
+                val error = DiamondBankOG.postgreSQL.addToPlayerShards(player.uniqueId, shards, ShardType.BANK)
                 if (error) {
-                    handleError(
-                        player.uniqueId,
-                        shards,
-                        null
+                    handleError(player.uniqueId, shards, null)
+                    player.sendMessage(
+                        DiamondBankOG.mm.deserialize(
+                            "${Config.prefix}<reset>: <red>A severe error has occurred. Please notify a staff member."
+                        )
                     )
-                    player.sendMessage(DiamondBankOG.mm.deserialize("${Config.prefix}<reset>: <red>A severe error has occurred. Please notify a staff member."))
                     return@withLockSuspend
                 }
             }

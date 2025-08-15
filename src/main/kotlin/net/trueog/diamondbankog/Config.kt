@@ -1,8 +1,8 @@
 package net.trueog.diamondbankog
 
-import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
 import kotlin.properties.Delegates
+import org.bukkit.configuration.file.YamlConfiguration
 
 object Config {
     lateinit var prefix: String
@@ -14,9 +14,7 @@ object Config {
     var postgresLogLimit by Delegates.notNull<Int>()
     lateinit var redisUrl: String
 
-    /**
-     * @return True if failed
-     */
+    /** @return True if failed */
     fun load(): Boolean {
         val file = File(DiamondBankOG.plugin.dataFolder, "config.yml")
         if (!file.exists()) {
@@ -74,7 +72,9 @@ object Config {
                 return true
             }
         } catch (_: Exception) {
-            DiamondBankOG.plugin.logger.severe("Failed to parse config option \"postgresLogLimit\" as an unsigned integer")
+            DiamondBankOG.plugin.logger.severe(
+                "Failed to parse config option \"postgresLogLimit\" as an unsigned integer"
+            )
             return true
         }
 

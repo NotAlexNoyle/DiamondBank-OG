@@ -13,9 +13,7 @@ import org.bukkit.persistence.PersistentDataType
 object Shard {
     val namespacedKey = NamespacedKey(DiamondBankOG.plugin, "diamondshard")
 
-    /**
-     * amount defaults to 1
-     */
+    /** amount defaults to 1 */
     fun createItemStack(amount: Int = 1): ItemStack {
         val shard = ItemStack(Material.PRISMARINE_SHARD, amount)
         val shardMeta = shard.itemMeta

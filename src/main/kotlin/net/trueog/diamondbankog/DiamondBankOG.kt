@@ -20,17 +20,20 @@ class DiamondBankOG : JavaPlugin() {
         lateinit var postgreSQL: PostgreSQL
         lateinit var redis: Redis
         lateinit var luckPerms: LuckPerms
+
         fun isPostgreSQLInitialised() = ::postgreSQL.isInitialized
-        var mm = MiniMessage.builder()
-            .tags(
-                TagResolver.builder()
-                    .resolver(StandardTags.color())
-                    .resolver(StandardTags.decorations())
-                    .resolver(StandardTags.rainbow())
-                    .resolver(StandardTags.reset())
-                    .build()
-            )
-            .build()
+
+        var mm =
+            MiniMessage.builder()
+                .tags(
+                    TagResolver.builder()
+                        .resolver(StandardTags.color())
+                        .resolver(StandardTags.decorations())
+                        .resolver(StandardTags.rainbow())
+                        .resolver(StandardTags.reset())
+                        .build()
+                )
+                .build()
 
         val transactionLock = TransactionLock()
         var economyDisabled: Boolean = false
@@ -68,7 +71,6 @@ class DiamondBankOG : JavaPlugin() {
         }
         luckPerms = luckPermsProvider.provider
 
-
         this.server.pluginManager.registerEvents(Events(), this)
 
         this.getCommand("deposit")?.setExecutor(Deposit())
@@ -93,18 +95,13 @@ class DiamondBankOG : JavaPlugin() {
         Shard.createCraftingRecipes()
 
         val diamondBankAPI = DiamondBankAPI(postgreSQL)
-        this.server.servicesManager.register(
-            DiamondBankAPI::class.java, diamondBankAPI, this,
-            ServicePriority.Normal
-        )
+        this.server.servicesManager.register(DiamondBankAPI::class.java, diamondBankAPI, this, ServicePriority.Normal)
     }
 
     override fun onDisable() {
         scope.cancel()
 
-        runBlocking {
-            scope.coroutineContext[Job]?.join()
-        }
+        runBlocking { scope.coroutineContext[Job]?.join() }
 
         transactionLock.removeAllLocks()
 
@@ -112,5 +109,4 @@ class DiamondBankOG : JavaPlugin() {
 
         if (isPostgreSQLInitialised()) postgreSQL.pool.disconnect().get()
     }
-
 }

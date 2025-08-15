@@ -1,20 +1,18 @@
 package net.trueog.diamondbankog
 
-import net.trueog.diamondbankog.PostgreSQL.PlayerShards
 import java.util.*
+import net.trueog.diamondbankog.PostgreSQL.PlayerShards
 
 object ErrorHandler {
     class EconomyException(message: String) : Exception(message)
 
-    /**
-     * Handles the error by throwing, disables the economy unless you specify it shouldn't
-     */
+    /** Handles the error by throwing, disables the economy unless you specify it shouldn't */
     fun handleError(
         uuid: UUID,
         expectedMutatedShards: Int,
         playerShards: PlayerShards?,
         otherUuid: UUID? = null,
-        dontDisableEconomy: Boolean = false
+        dontDisableEconomy: Boolean = false,
     ) {
         if (!dontDisableEconomy) DiamondBankOG.economyDisabled = true
 
@@ -37,7 +35,8 @@ object ErrorHandler {
                     if (playerShards.shardsInEnderChest != -1) "Player Ender Chest Balance: ${playerShards.shardsInEnderChest}" else ""
                 } else ""
             }
-        """.trimIndent()
+        """
+                .trimIndent()
         )
     }
 }

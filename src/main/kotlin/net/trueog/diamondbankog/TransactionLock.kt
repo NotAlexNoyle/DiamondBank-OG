@@ -9,6 +9,7 @@ class TransactionLock {
 
     sealed class LockResult<out T> {
         data class Acquired<T>(val result: T) : LockResult<T>()
+
         object Failed : LockResult<Nothing>()
     }
 
