@@ -1,4 +1,4 @@
-Use Cavekit 3 with Codex adversarial review, falling back to the Cavekit inspector agent when Codex is unavailable, to produce the follow-up defect chart for DiamondBank-OG after the maintainer's fix pass.
+Use Cavekit 3.1 with Codex adversarial review, falling back to the Cavekit inspector agent when Codex is unavailable, to produce the follow-up defect chart for DiamondBank-OG after the maintainer's fix pass.
 
 ## Objective
 
